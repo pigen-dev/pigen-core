@@ -21,7 +21,7 @@ func discover(pluginStruct shared.PluginStruct) (shared.PluginInterface,*goplugi
 	currentDir, _ := os.Getwd()
 	destDir := filepath.Join(currentDir, "plugins")
 	destPath := filepath.Join(destDir, pluginFile)
-	fmt.Println("destination path:", destPath)
+	log.Println("destination path:", destPath)
 	// Check if the binary exists locally
 	if _, err := os.Stat(destPath); os.IsNotExist(err) {
 		log.Printf("plugin binary not found: %s. Downlowading it...", pluginFile)
@@ -54,7 +54,7 @@ func discover(pluginStruct shared.PluginStruct) (shared.PluginInterface,*goplugi
 
 func downloadPlugin(repoUrl, pluginVersion, binaryName, destDir string) error {
 	url := fmt.Sprintf("%s/releases/download/%s/%s", repoUrl, pluginVersion, binaryName)
-	fmt.Println("Downloading plugin from:", url)
+	log.Println("Downloading plugin from:", url)
 	resp, err := http.Get(url)
 	if err != nil {
 			return fmt.Errorf("failed to fetch plugin: %w", err)
