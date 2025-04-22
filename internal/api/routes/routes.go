@@ -23,5 +23,6 @@ func SetupRouter() *gin.Engine {
 	//API routes
 	api:= router.Group("api/v1")
 	SetupPluginRoutes(api)
+	SetupCICDRoutes(api)
 	return router
 }
