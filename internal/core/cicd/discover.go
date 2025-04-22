@@ -1,4 +1,4 @@
-package plugins
+package cicd
 
 import (
 	"fmt"
@@ -9,15 +9,15 @@ import (
 	shared "github.com/pigen-dev/shared"
 )
 
-func discover(pluginStruct shared.PluginStruct) (shared.PluginInterface,*goplugin.Client, error) {
-	binaryName := pluginStruct.ID
-	pluginVersion := pluginStruct.Version
-	repoUrl := pluginStruct.RepoUrl
-	pluginBinaryPath, err := utils.PluginGetter(binaryName, repoUrl, pluginVersion)
+func discover(cicdStruct shared.PigenStepsFile) (shared.CicdInterface,*goplugin.Client, error) {
+	cicdType := cicdStruct.Type
+	pluginVersion := cicdStruct.Version
+	repoUrl := cicdStruct.RepoUrl
+	pluginBinaryPath, err := utils.PluginGetter(cicdType, repoUrl, pluginVersion)
 	// Set up the plugin client
 	client := goplugin.NewClient(&goplugin.ClientConfig{
 		HandshakeConfig: shared.Handshake,
-		Plugins: map[string]goplugin.Plugin{"pigenPlugin": &shared.PigenPlugin{}},
+		Plugins: map[string]goplugin.Plugin{"cicdPlugin": &shared.CicdPlugin{}},
 		Cmd: exec.Command(pluginBinaryPath),
 	})
 	rpcClient, err := client.Client()
@@ -25,11 +25,11 @@ func discover(pluginStruct shared.PluginStruct) (shared.PluginInterface,*goplugi
 		return nil, nil, fmt.Errorf("failed to create RPC client: %w", err)
 	}
 	
-	raw, err := rpcClient.Dispense("pigenPlugin")
+	raw, err := rpcClient.Dispense("cicdPlugin")
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to dispense plugin: %w", err)
 	}
 
-	plugin := raw.(shared.PluginInterface)
-	return plugin, client, nil
+	cicdPlugin := raw.(shared.CicdInterface)
+	return cicdPlugin, client, nil
 }
