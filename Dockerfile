@@ -25,12 +25,24 @@ FROM alpine:latest
 # Set working directory
 WORKDIR /app
 
+# Install Terraform dependencies
+RUN apk add --no-cache wget unzip curl
+
+# Install Terraform
+ENV TERRAFORM_VERSION=1.11.4
+RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
+    unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
+    mv terraform /usr/local/bin/ && \
+    rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+
 # Copy binary from builder
 COPY --from=builder /app/server .
 
 COPY --from=builder /app/config.json .
 
+# Set up plugins directory
 RUN mkdir -p /app/plugins && chmod 777 /app/plugins
+
 # Expose the port
 EXPOSE 5000
 
