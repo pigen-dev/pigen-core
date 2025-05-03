@@ -50,3 +50,18 @@ func CreateTrigger(c *gin.Context){
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Repo connected successfully"})
 }
+
+func PipelineNotifier(c *gin.Context){
+	var pipelineNotification shared.PipelineNotification
+	err := c.ShouldBindBodyWithJSON(&pipelineNotification)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid Notification request", "error": err.Error()})
+		return
+	}
+	err = cicd.PipelineNotifier(pipelineNotification)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed to handle pipeline notification", "error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Notification handled successfully"})
+}
