@@ -17,7 +17,7 @@ func SetupPlugin(c *gin.Context){
 	}
 	defer func() {
 		if r := recover(); r != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"message": "failed to setup plugin", "error": r})
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "failed to setup plugin recovered", "error": r})
 		}
 	}()
 	err = plugins.SetupPlugins(pluginStruct)
@@ -47,12 +47,12 @@ func GetOutput(c *gin.Context){
 	var pluginStruct shared.PluginStruct
 	err := c.ShouldBindBodyWithJSON(&pluginStruct)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid destroy plugin request", "error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid get output request", "error": err.Error()})
 		return
 	}
 	output := plugins.GetOutput(pluginStruct)
 	if output.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed to get plugin output", "error": output.Error.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed to get output", "error": output.Error.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, output)

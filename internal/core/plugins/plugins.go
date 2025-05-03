@@ -10,7 +10,7 @@ func SetupPlugins(pluginStruct shared.PluginStruct)error {
 		return fmt.Errorf("failed to discover plugin: %w", err)
 	}
 	defer client.Kill()
-	err = plugin.SetupPlugin(pluginStruct.Plugin.Config)
+	err = plugin.SetupPlugin(pluginStruct.Plugin)
 	if err != nil {
 		return fmt.Errorf("failed to setup plugin: %w", err)
 	}
@@ -24,7 +24,7 @@ func DestroyPlugin(pluginStruct shared.PluginStruct)error {
 		return fmt.Errorf("failed to discover plugin: %w", err)
 	}
 	defer client.Kill()
-	err = plugin.Destroy(pluginStruct.Plugin.Config)
+	err = plugin.Destroy(pluginStruct.Plugin)
 	if err != nil {
 		return fmt.Errorf("failed to setup plugin: %w", err)
 	}
@@ -38,7 +38,7 @@ func GetOutput(pluginStruct shared.PluginStruct) shared.GetOutputResponse {
 		return shared.GetOutputResponse{Output: nil, Error: err}
 	}
 	defer client.Kill()
-	output := plugin.GetOutput(pluginStruct.Plugin.Config)
+	output := plugin.GetOutput(pluginStruct.Plugin)
 	fmt.Println("Output:", output)
 	if output.Error != nil {
 		return shared.GetOutputResponse{Output: nil, Error: output.Error}
