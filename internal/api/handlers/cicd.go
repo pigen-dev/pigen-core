@@ -65,3 +65,45 @@ func PipelineNotifier(c *gin.Context){
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Notification handled successfully"})
 }
+
+func GenerateScript(c *gin.Context) {
+	var pigenStepsFile shared.PigenStepsFile
+
+	// Parse the incoming JSON
+	err := c.ShouldBindBodyWithJSON(&pigenStepsFile)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "invalid script generation request",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	// Recover from panic
+	defer func() {
+		if r := recover(); r != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": "panic: failed to generate script",
+				"error":   r,
+			})
+		}
+	}()
+
+	// Generate the file
+	cicdFile := cicd.GenerateScript(pigenStepsFile)
+	if cicdFile.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "failed to generate script",
+			"error":   cicdFile.Error.Error(),
+		})
+		return
+	}
+
+	// Set the filename (you can make it dynamic if needed)
+	filename := "cloudbuild.yaml"
+
+	// Send the file as a download
+	c.Header("Content-Description", "File Transfer")
+	c.Header("Content-Disposition", "attachment; filename="+filename)
+	c.Data(http.StatusOK, "application/x-yaml", cicdFile.FileScript)
+}
