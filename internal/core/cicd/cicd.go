@@ -26,3 +26,17 @@ func CreateTrigger(pigenSteps shared.PigenStepsFile)error {
 	err = cicdPlugin.CreateTrigger(pigenSteps)
 	return err
 }
+
+func GenerateScript(pigenSteps shared.PigenStepsFile)shared.CICDFile {
+	cicdPlugin, client, err := discover(pigenSteps)
+	if err != nil {
+		return shared.CICDFile{
+			Error: err,
+			FileScript: nil,
+		}
+	}
+	defer client.Kill()
+	cicdFile := cicdPlugin.GeneratScript(pigenSteps)
+	return cicdFile
+
+}
