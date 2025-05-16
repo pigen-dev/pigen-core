@@ -1,0 +1,14 @@
+type: cloudbuild
+version: v1.1.0
+repo_url: https://github.com/pigen-dev/cloudbuild-plugin
+config:
+  deployment:
+    project_number: "775465758731"
+    project_id: aidodev
+    project_region: "europe-west1"
+  github_url: https://github.com/pigen-dev/pigen-core.git
+  target_branch: "^test-pigen$"
+steps:
+  - step: Docker-build-push
+    placeholders:
+      image: europe-west1-docker.pkg.dev/aidodev/pigen-demo/demo:latest
