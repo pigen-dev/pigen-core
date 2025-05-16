@@ -1,0 +1,7 @@
+id: mvn-Build
+name: maven:3.3-jdk-8
+entrypoint: sh
+args:
+- '-c'
+- |
+  mvn package {{.Placeholders.flags}}

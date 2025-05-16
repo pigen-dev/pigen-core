@@ -1,0 +1,8 @@
+id: Docker-build-push
+name: 'gcr.io/cloud-builders/docker'
+entrypoint: 'bash'
+args:
+- '-c'
+- |
+  docker build -t {{.Placeholders.image}} .
+  docker push {{.Placeholders.image}}

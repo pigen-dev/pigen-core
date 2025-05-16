@@ -27,5 +27,3 @@ go.work.sum
 /plugins/*
 config.*
 /terraform
-
-/step-templates
