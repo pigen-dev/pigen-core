@@ -38,7 +38,9 @@ RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform
 # Copy binary from builder
 COPY --from=builder /app/server .
 
-COPY --from=builder /app/config.json .
+#COPY --from=builder /app/config.json .
+
+COPY --from=builder /app/step-templates /app/step-templates
 
 # Set up plugins directory
 RUN mkdir -p /app/plugins && chmod 777 /app/plugins
