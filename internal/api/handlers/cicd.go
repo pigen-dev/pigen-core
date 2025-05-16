@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"encoding/base64"
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/pigen-dev/pigen-core/internal/core/cicd"
 	shared "github.com/pigen-dev/shared"
@@ -99,11 +101,10 @@ func GenerateScript(c *gin.Context) {
 		return
 	}
 
-	// Set the filename (you can make it dynamic if needed)
-	filename := "cloudbuild.yaml"
-
-	// Send the file as a download
-	c.Header("Content-Description", "File Transfer")
-	c.Header("Content-Disposition", "attachment; filename="+filename)
-	c.Data(http.StatusOK, "application/x-yaml", cicdFile.FileScript)
+	encoded := base64.StdEncoding.EncodeToString(cicdFile.FileScript)
+	c.JSON(http.StatusOK, gin.H{
+		"content":  encoded,
+		"message":  "script generated successfully",
+		"error":    nil,
+	})
 }
