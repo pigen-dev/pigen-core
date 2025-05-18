@@ -9,5 +9,5 @@ func SetupPluginRoutes(api *gin.RouterGroup) {
 	plugin_api := api.Group("/plugin")
   plugin_api.POST("/setup_plugin", handlers.SetupPlugin)
 	plugin_api.POST("/destroy_plugin", handlers.DestroyPlugin)
-	plugin_api.GET("/get_output", handlers.GetOutput)
+	plugin_api.POST("/get_output", handlers.GetOutput)
 }

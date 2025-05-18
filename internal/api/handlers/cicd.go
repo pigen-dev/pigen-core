@@ -50,7 +50,7 @@ func CreateTrigger(c *gin.Context){
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "failed to create trigger", "error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Repo connected successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "Trigger created successfully"})
 }
 
 func PipelineNotifier(c *gin.Context){
